@@ -8,3 +8,4 @@ Requisitos y Configuraciones:
 *IntelliJ IDEA
 
 Practica 1 -> Construir proyecto con Maven
+Practica 2 -> Anoraciones
