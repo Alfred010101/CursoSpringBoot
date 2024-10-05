@@ -9,4 +9,4 @@ Requisitos y Configuraciones:
 
 Practica 1 -> Construir proyecto con Maven
 Practica 2 -> Anoraciones
-Practica 3 -> Parametros por url
+Practica 3 -> Parametros por url : Ejercicio
