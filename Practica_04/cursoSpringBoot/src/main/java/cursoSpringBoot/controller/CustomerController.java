@@ -43,9 +43,26 @@ public class CustomerController
     }
 
     @PostMapping("/usuarios")
-    public Customer addCustomer(@RequestBody Customer customer)
+    public Customer postCustomer(@RequestBody Customer customer)
     {
         customerList.add(customer);
         return customer;
+    }
+
+    @PutMapping("/usuarios")
+    public Customer putCustomer(@RequestBody Customer customer)
+    {
+        for (Customer c : customerList)
+        {
+            if (c.getId() == customer.getId())
+            {
+                c.setName(customer.getName());
+                c.setUsername(customer.getUsername());
+                c.setPassword(customer.getPassword());
+
+                return c;
+            }
+        }
+        return null;
     }
 }
