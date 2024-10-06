@@ -2,6 +2,8 @@ package cursoSpringBoot.controller;
 
 import cursoSpringBoot.domain.Customer;
 import jakarta.annotation.PostConstruct;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,41 +23,40 @@ public class CustomerController
 
     // @GetMapping
     @RequestMapping(method = RequestMethod.GET)
-    public List<Customer> getCustomerList()
+    public ResponseEntity<List<Customer>> getCustomerList()
     {
-        return customerList;
+        return ResponseEntity.ok(customerList);
     }
 
     // @GetMapping("/{id}")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Customer getCustomer(@PathVariable String id)
+    public ResponseEntity<?> getCustomer(@PathVariable String id)
     {
         try
         {
             for (Customer c : customerList)
             {
                 if (c.getId() == Integer.parseInt(id))
-                {
-                    return c;
-                }
+                    return ResponseEntity.ok(c);
             }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado <<<" + id + ">>>");
         }catch (Exception e)
         {
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Argumento no valido");
     }
 
     // @PostMapping
     @RequestMapping(method = RequestMethod.POST)
-    public Customer postCustomer(@RequestBody Customer customer)
+    public ResponseEntity<?> postCustomer(@RequestBody Customer customer)
     {
         customerList.add(customer);
-        return customer;
+        return ResponseEntity.status(HttpStatus.CREATED).body("Usuario agregado correctamente " + customer.getId());
     }
 
     // @PutMapping
     @RequestMapping(method = RequestMethod.PUT)
-    public Customer putCustomer(@RequestBody Customer customer)
+    public ResponseEntity<?> putCustomer(@RequestBody Customer customer)
     {
         for (Customer c : customerList)
         {
@@ -64,31 +65,31 @@ public class CustomerController
                 c.setName(customer.getName());
                 c.setUsername(customer.getUsername());
                 c.setPassword(customer.getPassword());
-
-                return c;
+                return ResponseEntity.ok("Usuario modificado correctamente " + customer.getId());
             }
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado " + customer.getId());
     }
 
     // @DeleteMapping("/{id}")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public Customer deleCustomer(@PathVariable int id)
+    public ResponseEntity<?> deleCustomer(@PathVariable int id)
     {
+        // Validar que el parametro sea del tipo correcto
         for (Customer c : customerList)
         {
             if (c.getId() == id)
             {
                 customerList.remove(c);
-                return c;
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuario eliminado satisfactoriamente " + c.getUsername());
             }
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado " + id);
     }
 
     // @PatchMapping
     @RequestMapping(method = RequestMethod.PATCH)
-    public Customer patchCustomer(@RequestBody Customer customer)
+    public ResponseEntity<?> patchCustomer(@RequestBody Customer customer)
     {
         for(Customer c : customerList)
         {
@@ -100,10 +101,10 @@ public class CustomerController
                     c.setPassword(customer.getPassword());
                 if (customer.getUsername() != null)
                     c.setUsername(customer.getUsername());
-                return c;
+                return ResponseEntity.ok("Usuario actualizado");
             }
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encotro el usuario " + customer.getId());
     }
 }
 
