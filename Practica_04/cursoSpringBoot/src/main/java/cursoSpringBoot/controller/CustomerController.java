@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@RequestMapping("/usuarios")
 public class CustomerController
 {
     private List<Customer> customerList = new ArrayList<>(Arrays.asList(
@@ -18,13 +19,15 @@ public class CustomerController
             new Customer(444, "Diana", "diana", "********")
     ));
 
-    @GetMapping("/usuarios")
+    // @GetMapping
+    @RequestMapping(method = RequestMethod.GET)
     public List<Customer> getCustomerList()
     {
         return customerList;
     }
 
-    @GetMapping("/usuarios/{id}")
+    // @GetMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Customer getCustomer(@PathVariable String id)
     {
         try
@@ -42,14 +45,16 @@ public class CustomerController
         return null;
     }
 
-    @PostMapping("/usuarios")
+    // @PostMapping
+    @RequestMapping(method = RequestMethod.POST)
     public Customer postCustomer(@RequestBody Customer customer)
     {
         customerList.add(customer);
         return customer;
     }
 
-    @PutMapping("/usuarios")
+    // @PutMapping
+    @RequestMapping(method = RequestMethod.PUT)
     public Customer putCustomer(@RequestBody Customer customer)
     {
         for (Customer c : customerList)
@@ -66,7 +71,8 @@ public class CustomerController
         return null;
     }
 
-    @DeleteMapping("/usuarios/{id}")
+    // @DeleteMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public Customer deleCustomer(@PathVariable int id)
     {
         for (Customer c : customerList)
@@ -80,7 +86,8 @@ public class CustomerController
         return null;
     }
 
-    @PatchMapping("/usuarios")
+    // @PatchMapping
+    @RequestMapping(method = RequestMethod.PATCH)
     public Customer patchCustomer(@RequestBody Customer customer)
     {
         for(Customer c : customerList)
