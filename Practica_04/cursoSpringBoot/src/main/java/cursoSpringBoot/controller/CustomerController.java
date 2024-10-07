@@ -5,7 +5,9 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +53,13 @@ public class CustomerController
     public ResponseEntity<?> postCustomer(@RequestBody Customer customer)
     {
         customerList.add(customer);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Usuario agregado correctamente " + customer.getId());
+        //return ResponseEntity.status(HttpStatus.CREATED).body("Usuario agregado correctamente " + customer.getId());
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(customer.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     // @PutMapping
